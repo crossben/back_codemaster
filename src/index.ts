@@ -10,7 +10,7 @@ import Dbconnect from './config/mongo.config';
 export const app = express();
 import cors from 'cors';
 import helmet from 'helmet';
-
+import userRoutes from './routes/user.route';
 // Connect to the MongoDB database
 Dbconnect();
 
@@ -20,9 +20,7 @@ const port = process.env.PORT;
 // Middleware setup
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
-
-// Note: This line is redundant and can be removed
-app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 // Configure CORS for cross-origin requests
 app.use(
@@ -33,8 +31,20 @@ app.use(
     })
 );
 
-// Use Helmet for enhanced security headers
-app.use(helmet());
+
+// User Routes
+app.use(`${process.env.API_PREFIX}/user`, userRoutes);
+
+
+
+
+
+
+
+
+
+
+
 
 // Define a simple root route
 app.get('/', (res: Response) => {

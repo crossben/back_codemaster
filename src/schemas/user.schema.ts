@@ -38,6 +38,7 @@ const userSchema = new Schema<IUser>({
     },
     profileImageUrl: {
         type: String,
+        default: "https://i.imgur.com/m7pNWV9.png",
         required: false,
     },
     enrolledToCourses: {
@@ -89,3 +90,18 @@ export const User = mongoose.model<IUser>('User', userSchema);
  * 6. Consider implementing virtual fields (e.g., fullName).
  * 7. Add indexes to frequently queried fields for performance.
  */
+
+// Sample JSON for testing the User API
+const sampleUserJSON = {
+    "uid": "12345",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "johndoe@example.com",
+    "phoneNumber": "+1234567890",
+    "googleId": "google123456",
+    "password": "securePassword123",
+    "profileImageUrl": "https://example.com/profile.jpg",
+    "enrolledToCourses": ["60d5ecb74f52a531a4d1a346", "60d5ecb74f52a531a4d1a347"]
+};
+
+// console.log(JSON.stringify(sampleUserJSON, null, 2));
