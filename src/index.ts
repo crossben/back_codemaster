@@ -31,23 +31,11 @@ app.use(
     })
 );
 
-
 // User Routes
 app.use(`${process.env.API_PREFIX}/user`, userRoutes);
 
-
-
-
-
-
-
-
-
-
-
-
 // Define a simple root route
-app.get('/', (res: Response) => {
+app.get(`${process.env.API_PREFIX}/`, (res: Response) => {
     res.send('Hello World!');
 });
 

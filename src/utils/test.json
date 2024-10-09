@@ -1,0 +1,46 @@
+{
+  "loginByMail": {
+    "email": "admin@gmail.com",
+    "password": "Passer123"
+  },
+  "SignUp": {
+    "firstname": "Ben Hattab",
+    "lastname": "Mahdi",
+    "email": "admin@gmail.com",
+    "password": "Passer123",
+    "phoneNumber": "+1234567890",
+    "googleId": "123456789012345678901",
+    "profileImageUrl": "https://example.com/profile.jpg"
+  },
+  "loginByGoogle": {
+    "googleId": "123456789012345678901"
+  },
+  "getUserById": {
+    "uid": "id"
+  },
+  "updateUser": {
+    "uid": "id",
+    "userData": {
+      "firstname": "Jane",
+      "lastname": "Doe",
+      "email": "janedoe@example.com",
+      "phoneNumber": "+9876543210"
+    }
+  },
+  "deleteUser": {
+    "uid": "id"
+  },
+  "getAllUsers": {},
+  "getUserByEmail": {
+    "email": "admin@gmail.com"
+  },
+  "getUserByPhoneNumber": {
+    "phoneNumber": "+1234567890"
+  },
+  "getUserByGoogleId": {
+    "googleId": "123456789012345678901"
+  },
+  "getUserByUid": {
+    "uid": "user-uid-123"
+  }
+}

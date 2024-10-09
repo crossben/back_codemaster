@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { loginByMail, loginByGoogle, SignUp, getUserByUid, getAllUsers, deleteUser, updateUser, getUserByEmail, getUserByPhoneNumber, getUserByGoogleId } from "../services/user.service";
+import { loginByMail, loginByGoogle, SignUp, getUserByUId, getAllUsers, deleteUser, updateUser, getUserByEmail, getUserByPhoneNumber, getUserByGoogleId, getUserById } from "../services/user.service";
 
 export const Login = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -17,12 +17,12 @@ export const Login = async (req: Request, res: Response): Promise<any> => {
             return res.status(400).json({ success: false, message: "Invalid email format" });
         }
         // Minimum password length check
-        if (password.length < 6) {
-            return res.status(400).json({ success: false, message: "Password must be at least 6 characters long" });
+        if (password.length < 8) {
+            return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
         }
         const result = await loginByMail(email, password);
         res.status(200).json(result);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Login error:', error);
         res.status(500).json({ success: false, message: "An error occurred during login" });
     }
@@ -52,11 +52,11 @@ export const GoogleLogin = async (req: Request, res: Response): Promise<any> => 
         try {
             const result = await loginByGoogle(googleId);
             res.status(200).json(result);
-        } catch (loginError) {
+        } catch (loginError: any) {
             console.error('Google Login error:', loginError);
             res.status(500).json({ success: false, message: "An error occurred during Google login" });
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error('Google Login error:', error);
         res.status(500).json({ success: false, message: "An error occurred processing the request" });
     }
@@ -106,14 +106,29 @@ export const Sign = async (req: Request, res: Response): Promise<any> => {
 
 export const GetUserById = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { uid } = req.params;
-        const user = await getUserByUid(uid);
+        const { id } = req.params;
+        const user = await getUserById(id);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
         res.status(200).json({ success: true, message: "User fetched successfully", user });
-    } catch (error) {
+    } catch (error: any) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ success: false, message: "An error occurred fetching the user" });
+    }
+}
+
+export const GetUserByUId = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { uid } = req.params;
+        const user = await getUserByUId(uid);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        res.status(200).json({ success: true, message: "User fetched successfully", user });
+    } catch (error: any) {
         console.error('Error fetching user:', error);
         res.status(500).json({ success: false, message: "An error occurred fetching the user" });
     }
@@ -121,9 +136,9 @@ export const GetUserById = async (req: Request, res: Response): Promise<any> => 
 
 export const UpdateUser = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { uid } = req.params;
+        const { id } = req.params;
         const userData = req.body;
-        const updatedUser = await updateUser(uid, userData);
+        const updatedUser = await updateUser(id, userData);
         if (!updatedUser) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -137,14 +152,14 @@ export const UpdateUser = async (req: Request, res: Response): Promise<any> => {
 
 export const DeleteUser = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { uid } = req.params;
-        const result = await deleteUser(uid);
+        const { id } = req.params;
+        const result = await deleteUser(id);
         if (!result.success) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
         res.status(200).json({ success: true, message: "User deleted successfully" });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error deleting user:', error);
         res.status(500).json({ success: false, message: "An error occurred deleting the user" });
     }
@@ -154,7 +169,7 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<any> => 
     try {
         const users = await getAllUsers();
         res.status(200).json({ success: true, message: "Users fetched successfully", users });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching users:', error);
         res.status(500).json({ success: false, message: "An error occurred fetching the users" });
     }
@@ -169,7 +184,7 @@ export const GetUserByMail = async (req: Request, res: Response): Promise<any> =
         }
 
         res.status(200).json({ success: true, message: "User fetched successfully", user });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching user by email:', error);
         res.status(500).json({ success: false, message: "An error occurred fetching the user by email" });
     }
@@ -184,11 +199,11 @@ export const GetUserByPhoneNumber = async (req: Request, res: Response): Promise
         }
 
         res.status(200).json({ success: true, message: "User fetched successfully", user });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching user by phone number:', error);
         res.status(500).json({ success: false, message: "An error occurred fetching the user by phone number" });
     }
-}   
+}
 
 export const GetUserByGoogleId = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -199,11 +214,8 @@ export const GetUserByGoogleId = async (req: Request, res: Response): Promise<an
         }
 
         res.status(200).json({ success: true, message: "User fetched successfully", user });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching user by Google ID:', error);
         res.status(500).json({ success: false, message: "An error occurred fetching the user by Google ID" });
     }
 }
-
-
-

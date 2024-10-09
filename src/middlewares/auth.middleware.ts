@@ -6,7 +6,7 @@ interface CustomRequest extends Request {
 }
 
 
-export default async function (req: CustomRequest, res: Response, next: NextFunction) {
+const Auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         const firebaseToken = req.headers.authorization?.split(" ")[1];
 
@@ -39,3 +39,5 @@ export default async function (req: CustomRequest, res: Response, next: NextFunc
         res.sendStatus(401);
     }
 }
+
+export default Auth;

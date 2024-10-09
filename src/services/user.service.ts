@@ -1,6 +1,6 @@
-import express, { Request, Response, Router } from "express";
 import { User } from "../schemas/user.schema";
 import { compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 // import authenticate from "../middlewares/auth.middleware";
 // import firebaseAdmin from "../config/firebase.config";
 
@@ -75,16 +75,23 @@ export const loginByMail = async (email: string, password: string) => {
 
         // Generate a JWT token or session for the user
         // const token = generateToken(user);
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jwt.sign({ _id: user.id }, jwtSecret) || "no token";
 
         return {
             success: true,
             message: "User logged in successfully",
-            // token: token,
+            token: token,
             user: {
+                id: user._id,
                 uid: user.uid,
                 email: user.email,
                 firstname: user.firstname,
-                lastname: user.lastname
+                lastname: user.lastname,
+                phoneNumber: user.phoneNumber,
             }
         };
     } catch (error) {
@@ -117,8 +124,26 @@ export const SignUp = async (userData: any) => {
 
         await newUser.save();
 
-        return { success: true, message: "User created successfully" };
-    } catch (error: any) {
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jwt.sign({ _id: newUser.id }, jwtSecret) || "no token";
+
+        return {
+            success: true,
+            message: "User created successfully",
+            token: token,
+            user: {
+                id: newUser._id,
+                uid: newUser.uid,
+                email: newUser.email,
+                firstname: newUser.firstname,
+                lastname: newUser.lastname,
+                phoneNumber: newUser.phoneNumber,
+            }
+        };
+    } catch (error) {
         console.error('SignUp error:', error);
         return { success: false, message: "Error creating user" };
     }
@@ -130,10 +155,17 @@ export const loginByGoogle = async (googleId: string) => {
         if (!user) {
             return { success: false, message: "User not found" };
         }
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jwt.sign({ _id: user.id }, jwtSecret) || "no token";
         return {
             success: true,
             message: "User logged in successfully",
+            token: token,
             user: {
+                id: user._id,
                 uid: user.uid,
                 firstname: user.firstname,
                 lastname: user.lastname,
@@ -149,29 +181,107 @@ export const loginByGoogle = async (googleId: string) => {
     }
 }
 
-export const getUserById = async (uid: string) => {
+export const getUserById = async (id: any) => {
     try {
-        const user = await User.findOne({ uid });
-        return user;
+        const user = await User.findOne({ _id: id });
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        // const token = jwt.sign({ _id: user.id }, jwtSecret) || "no token";
+        return {
+            success: true,
+            message: "User fetched successfully",
+            // token: token,
+            user: user ? {
+                id: user._id,
+                uid: user.uid,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                googleId: user.googleId,
+                profileImageUrl: user.profileImageUrl
+            } : null
+        };
     } catch (error) {
         console.error('Error fetching user:', error);
-        return null;
+        return { success: false, message: "Error fetching user" };
+    }
+}
+export const getUserByUId = async (uid: any) => {
+    try {
+        const user = await User.findOne({ uid });
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        // const token = jwt.sign({ _id: user.id }, jwtSecret) || "no token";
+        return {
+            success: true,
+            message: "User fetched successfully",
+            // token: token,
+            user: user ? {
+                id: user._id,
+                uid: user.uid,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                googleId: user.googleId,
+                profileImageUrl: user.profileImageUrl
+            } : null
+        };
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return { success: false, message: "Error fetching user" };
     }
 }
 
-export const updateUser = async (uid: string, userData: any) => {
+export const updateUser = async (id: any, userData: any) => {
     try {
-        const user = await User.findOneAndUpdate({ uid }, userData, { new: true });
-        return user;
+        const user = await User.findOneAndUpdate({ _id: id }, userData, { new: true });
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        const token = jwt.sign({ _id: user.id }, jwtSecret) || "no token";
+        return {
+            success: true,
+            message: "User fetched successfully",
+            token: token,
+            user: {
+                id: user._id,
+                uid: user.uid,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                googleId: user.googleId,
+                profileImageUrl: user.profileImageUrl
+            }
+        };
     } catch (error) {
         console.error('Error updating user:', error);
         return null;
     }
 }
 
-export const deleteUser = async (uid: string) => {
+export const deleteUser = async (id: any) => {
     try {
-        await User.findOneAndDelete({ uid });
+        await User.findOneAndDelete({ _id: id });
+        if (!User) {
+            return { success: false, message: "User not found" };
+        }
         return { success: true, message: "User deleted successfully" };
     } catch (error) {
         console.error('Error deleting user:', error);
@@ -192,40 +302,95 @@ export const getAllUsers = async () => {
 export const getUserByEmail = async (email: string) => {
     try {
         const user = await User.findOne({ email });
-        return user;
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        const token = jwt.sign({ id: user.id }, jwtSecret) || "no token";
+        return {
+            success: true,
+            message: "User fetched successfully",
+            token: token,
+            user: {
+                id: user._id,
+                uid: user.uid,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                googleId: user.googleId,
+                profileImageUrl: user.profileImageUrl
+            }
+        };
     } catch (error) {
         console.error('Error fetching user by email:', error);
         return null;
     }
 }
 
-export const getUserByPhoneNumber = async (phoneNumber: string) => {
+export const getUserByPhoneNumber = async (phoneNumber: any) => {
     try {
         const user = await User.findOne({ phoneNumber });
-        return user;
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        const token = jwt.sign({ id: user._id }, jwtSecret) || "no token";
+        return {
+            success: true,
+            message: "User fetched successfully",
+            token: token,
+            user: user ? {
+                id: user._id,
+                uid: user.uid,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                googleId: user.googleId,
+                profileImageUrl: user.profileImageUrl
+            } : null
+        };
     } catch (error) {
         console.error('Error fetching user by phone number:', error);
         return null;
     }
 }
 
-export const getUserByGoogleId = async (googleId: string) => {
+export const getUserByGoogleId = async (googleId: any) => {
     try {
         const user = await User.findOne({ googleId });
-        return user;
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        const token = jwt.sign({ id: user._id }, jwtSecret) || "no token";
+        return {
+            success: true,
+            message: "User fetched successfully",
+            token: token,
+            user: {
+                id: user._id,
+                uid: user.uid,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                googleId: user.googleId,
+                profileImageUrl: user.profileImageUrl
+            }
+        };
     } catch (error) {
         console.error('Error fetching user by Google ID:', error);
         return null;
     }
 }
-
-export const getUserByUid = async (uid: string) => {
-    try {
-        const user = await User.findOne({ uid });
-        return user;
-    } catch (error) {
-        console.error('Error fetching user by UID:', error);
-        return null;
-    }
-}
-
