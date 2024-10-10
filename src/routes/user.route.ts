@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { GetAllUsers, GoogleLogin, Login, Sign, GetUserById, GetUserByMail, GetUserByPhoneNumber, GetUserByGoogleId, DeleteUser, UpdateUser } from "../controllers/user.controller";
+import { GetAllUsers, GoogleLogin, Login, Register, GetUserById, GetUserByMail, GetUserByPhoneNumber, GetUserByGoogleId, DeleteUser, UpdateUser } from "../controllers/user.controller";
 
 const router = Router();
 
 // User registration
 // localhost:2002/api/user/signup-api
-router.post("/signup-api", Sign);
+router.post("/register-api", Register);
 
 // User login with email and password
 // localhost:2002/api/user/login-api

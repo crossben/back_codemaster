@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { loginByMail, loginByGoogle, SignUp, getUserByUId, getAllUsers, deleteUser, updateUser, getUserByEmail, getUserByPhoneNumber, getUserByGoogleId, getUserById } from "../services/user.service";
+import { loginByMail, loginByGoogle, register, getUserByUId, getAllUsers, deleteUser, updateUser, getUserByEmail, getUserByPhoneNumber, getUserByGoogleId, getUserById } from "../services/user.service";
+import { IUser } from "../interfaces/interface";
 
-export const Login = async (req: Request, res: Response): Promise<any> => {
+export const Login = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { email, password } = req.body;
         // Data validation
@@ -28,7 +29,7 @@ export const Login = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-export const GoogleLogin = async (req: Request, res: Response): Promise<any> => {
+export const GoogleLogin = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { googleId } = req.body;
 
@@ -62,7 +63,7 @@ export const GoogleLogin = async (req: Request, res: Response): Promise<any> => 
     }
 }
 
-export const Sign = async (req: Request, res: Response): Promise<any> => {
+export const Register = async (req: Request, res: Response): Promise<any> => {
     try {
         const { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } = req.body;
 
@@ -94,8 +95,8 @@ export const Sign = async (req: Request, res: Response): Promise<any> => {
             return res.status(400).json({ success: false, message: "Invalid phone number format" });
         }
 
-        const userData = { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl };
-        const result = await SignUp(userData);
+        const userData = { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } as IUser;
+        const result = await register(userData);
         res.status(result.success ? 201 : 400).json(result);
     } catch (error) {
         console.error('Sign up error:', error);
@@ -104,7 +105,7 @@ export const Sign = async (req: Request, res: Response): Promise<any> => {
 }
 
 
-export const GetUserById = async (req: Request, res: Response): Promise<any> => {
+export const GetUserById = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { id } = req.params;
         const user = await getUserById(id);
@@ -119,7 +120,7 @@ export const GetUserById = async (req: Request, res: Response): Promise<any> => 
     }
 }
 
-export const GetUserByUId = async (req: Request, res: Response): Promise<any> => {
+export const GetUserByUId = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { uid } = req.params;
         const user = await getUserByUId(uid);
@@ -134,7 +135,7 @@ export const GetUserByUId = async (req: Request, res: Response): Promise<any> =>
     }
 }
 
-export const UpdateUser = async (req: Request, res: Response): Promise<any> => {
+export const UpdateUser = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { id } = req.params;
         const userData = req.body;
@@ -150,7 +151,7 @@ export const UpdateUser = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-export const DeleteUser = async (req: Request, res: Response): Promise<any> => {
+export const DeleteUser = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { id } = req.params;
         const result = await deleteUser(id);
@@ -165,7 +166,7 @@ export const DeleteUser = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-export const GetAllUsers = async (req: Request, res: Response): Promise<any> => {
+export const GetAllUsers = async (req: Request, res: Response): Promise<IUser[] | any> => {
     try {
         const users = await getAllUsers();
         res.status(200).json({ success: true, message: "Users fetched successfully", users });
@@ -175,7 +176,7 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<any> => 
     }
 }
 
-export const GetUserByMail = async (req: Request, res: Response): Promise<any> => {
+export const GetUserByMail = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { email } = req.params;
         const user = await getUserByEmail(email);
@@ -190,7 +191,7 @@ export const GetUserByMail = async (req: Request, res: Response): Promise<any> =
     }
 }
 
-export const GetUserByPhoneNumber = async (req: Request, res: Response): Promise<any> => {
+export const GetUserByPhoneNumber = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { phoneNumber } = req.params;
         const user = await getUserByPhoneNumber(phoneNumber);
@@ -205,7 +206,7 @@ export const GetUserByPhoneNumber = async (req: Request, res: Response): Promise
     }
 }
 
-export const GetUserByGoogleId = async (req: Request, res: Response): Promise<any> => {
+export const GetUserByGoogleId = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { googleId } = req.params;
         const user = await getUserByGoogleId(googleId);

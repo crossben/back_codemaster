@@ -1,6 +1,7 @@
 import { User } from "../schemas/user.schema";
 import { compare } from "bcrypt";
 import jwt from "jsonwebtoken";
+import { IUser } from "../interfaces/interface";
 // import authenticate from "../middlewares/auth.middleware";
 // import firebaseAdmin from "../config/firebase.config";
 
@@ -100,7 +101,7 @@ export const loginByMail = async (email: string, password: string) => {
     }
 }
 
-export const SignUp = async (userData: any) => {
+export const register = async (userData: IUser) => {
     try {
         const { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } = userData;
         if (!firstname || !lastname || !email || !password) {
@@ -244,7 +245,7 @@ export const getUserByUId = async (uid: any) => {
     }
 }
 
-export const updateUser = async (id: any, userData: any) => {
+export const updateUser = async (id: any, userData: IUser) => {
     try {
         const user = await User.findOneAndUpdate({ _id: id }, userData, { new: true });
         const jwtSecret = process.env.JWT_SECRET;

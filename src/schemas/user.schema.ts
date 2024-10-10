@@ -41,6 +41,12 @@ const userSchema = new Schema<IUser>({
         default: "https://i.imgur.com/m7pNWV9.png",
         required: false,
     },
+    role: {
+        type: String,
+        default: "student",
+        required: true,
+        immutable: true,
+    },
     enrolledToCourses: {
         type: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
         required: false,

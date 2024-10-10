@@ -9,6 +9,7 @@ export interface IUser extends Document {
     googleId?: string;
     password?: string;
     profileImageUrl?: string;
+    role: string;
     enrolledToCourses?: Schema.Types.ObjectId[];
     emailVerified?: boolean;
     phoneNumberVerified?: boolean;
@@ -57,6 +58,7 @@ export interface IInstructor extends Document {
     googleId?: string;
     password?: string;
     profileImageUrl: string;
+    role: string;
     courses: ICourse[];
 }
 

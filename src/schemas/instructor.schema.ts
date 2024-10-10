@@ -35,6 +35,12 @@ const instructorSchema = new Schema<IInstructor>({
         type: String,
         required: false,
     },
+    role: {
+        type: String,
+        default: "instructor",
+        required: true,
+        immutable: true
+    },
     courses: {
         type: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
         required: false,
