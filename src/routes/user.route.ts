@@ -4,7 +4,7 @@ import { GetAllUsers, GoogleLogin, Login, Register, GetUserById, GetUserByMail, 
 const router = Router();
 
 // User registration
-// localhost:2002/api/user/signup-api
+// localhost:2002/api/user/register-api
 router.post("/register-api", Register);
 
 // User login with email and password

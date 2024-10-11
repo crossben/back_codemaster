@@ -63,7 +63,7 @@ export const GoogleLogin = async (req: Request, res: Response): Promise<IUser | 
     }
 }
 
-export const Register = async (req: Request, res: Response): Promise<any> => {
+export const Register = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } = req.body;
 

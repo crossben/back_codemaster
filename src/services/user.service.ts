@@ -58,7 +58,7 @@ import { IUser } from "../interfaces/interface";
 
 // export default router;
 
-export const loginByMail = async (email: string, password: string) => {
+export const loginByMail = async (email: string, password: string): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
@@ -101,7 +101,7 @@ export const loginByMail = async (email: string, password: string) => {
     }
 }
 
-export const register = async (userData: IUser) => {
+export const register = async (userData: IUser): Promise<IUser | any> => {
     try {
         const { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } = userData;
         if (!firstname || !lastname || !email || !password) {
@@ -150,7 +150,7 @@ export const register = async (userData: IUser) => {
     }
 }
 
-export const loginByGoogle = async (googleId: string) => {
+export const loginByGoogle = async (googleId: string): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ googleId });
         if (!user) {
@@ -182,7 +182,7 @@ export const loginByGoogle = async (googleId: string) => {
     }
 }
 
-export const getUserById = async (id: any) => {
+export const getUserById = async (id: any): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ _id: id });
         const jwtSecret = process.env.JWT_SECRET;
@@ -213,7 +213,7 @@ export const getUserById = async (id: any) => {
         return { success: false, message: "Error fetching user" };
     }
 }
-export const getUserByUId = async (uid: any) => {
+export const getUserByUId = async (uid: any): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ uid });
         const jwtSecret = process.env.JWT_SECRET;
@@ -245,7 +245,7 @@ export const getUserByUId = async (uid: any) => {
     }
 }
 
-export const updateUser = async (id: any, userData: IUser) => {
+export const updateUser = async (id: any, userData: IUser): Promise<IUser | any> => {
     try {
         const user = await User.findOneAndUpdate({ _id: id }, userData, { new: true });
         const jwtSecret = process.env.JWT_SECRET;
@@ -277,7 +277,7 @@ export const updateUser = async (id: any, userData: IUser) => {
     }
 }
 
-export const deleteUser = async (id: any) => {
+export const deleteUser = async (id: any): Promise<IUser | any> => {
     try {
         await User.findOneAndDelete({ _id: id });
         if (!User) {
@@ -290,7 +290,7 @@ export const deleteUser = async (id: any) => {
     }
 }
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (): Promise<IUser | any> => {
     try {
         const users = await User.find();
         return users;
@@ -300,7 +300,7 @@ export const getAllUsers = async () => {
     }
 }
 
-export const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ email });
         const jwtSecret = process.env.JWT_SECRET;
@@ -332,7 +332,7 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
-export const getUserByPhoneNumber = async (phoneNumber: any) => {
+export const getUserByPhoneNumber = async (phoneNumber: any): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ phoneNumber });
         const jwtSecret = process.env.JWT_SECRET;
@@ -364,7 +364,7 @@ export const getUserByPhoneNumber = async (phoneNumber: any) => {
     }
 }
 
-export const getUserByGoogleId = async (googleId: any) => {
+export const getUserByGoogleId = async (googleId: any): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ googleId });
         const jwtSecret = process.env.JWT_SECRET;

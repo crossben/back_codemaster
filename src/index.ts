@@ -11,6 +11,7 @@ export const app = express();
 import cors from 'cors';
 import helmet from 'helmet';
 import userRoutes from './routes/user.route';
+import instructorRoutes from './routes/instructor.route';
 // Connect to the MongoDB database
 Dbconnect();
 
@@ -33,6 +34,7 @@ app.use(
 
 // User Routes
 app.use(`${process.env.API_PREFIX}/user`, userRoutes);
+app.use(`${process.env.API_PREFIX}/instructor`, instructorRoutes);
 
 // Define a simple root route
 app.get(`${process.env.API_PREFIX}/`, (res: Response) => {

@@ -42,5 +42,36 @@
   },
   "getUserByUid": {
     "uid": "user-uid-123"
+  },
+  "instructor": {
+    "registerInstructor": {
+      "firstname": "Mahdi",
+      "lastname": "Hattab",
+      "email": "mahdi@gmail.com",
+      "password": "Passer123",
+      "phoneNumber": "+1987654321",
+      "googleId": "987654321098765432109",
+      "profileImageUrl": "https://example.com/johndoe.jpg"
+    },
+    "loginInstructor": {
+      "email": "mahdi@gmail.com",
+      "password": "Passer123"
+    },
+    "getInstructorById": {
+      "id": ""
+    },
+    "getAllInstructors": {},
+    "updateInstructor": {
+      "id": "",
+      "instructorData": {
+        "firstname": "John",
+        "lastname": "Smith",
+        "email": "mahdi@gmail.com",
+        "phoneNumber": "+1987654322"
+      }
+    },
+    "deleteInstructor": {
+      "id": ""
+    }
   }
 }
