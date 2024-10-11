@@ -1,7 +1,7 @@
 import { Document, Schema } from "mongoose"
 
 export interface IUser extends Document {
-    uid: string;
+    uid: any;
     firstname: string;
     lastname: string;
     email: string;
@@ -16,7 +16,7 @@ export interface IUser extends Document {
 }
 
 export interface ICourse extends Document {
-    uid: string;
+    uid: any;
     title: string;
     description: string;
     imageUrl: string;
@@ -24,7 +24,7 @@ export interface ICourse extends Document {
     category: string;
     level: string;
     duration: string;
-    instructorId: string;
+    instructor: string;
     enrolledStudents: number;
     rating: number;
     requirements: string[];
@@ -50,7 +50,7 @@ export interface ICourse extends Document {
 }
 
 export interface IInstructor extends Document {
-    uid: string;
+    uid: any;
     firstname: string;
     lastname: string;
     email: string;

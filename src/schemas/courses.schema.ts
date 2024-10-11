@@ -35,7 +35,7 @@ const courseSchema = new Schema<ICourse>({
         type: String,
         required: true,
     },
-    instructorId: {
+    instructor: {
         type: String,
         required: true,
     },
@@ -108,3 +108,5 @@ const courseSchema = new Schema<ICourse>({
 });
 
 export const Course = model<ICourse>("Course", courseSchema);
+
+
