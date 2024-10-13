@@ -19,6 +19,4 @@ moduleSchema.pre<IModule>('save', function (next) {
 });
 
 // Create the model
-const Module: Model<IModule> = mongoose.model<IModule>('Module', moduleSchema);
-
-export default Module;
+export const Module: Model<IModule> = mongoose.model<IModule>('Modules', moduleSchema);

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { loginByMail, loginByGoogle, register, getUserByUId, getAllUsers, deleteUser, updateUser, getUserByEmail, getUserByPhoneNumber, getUserByGoogleId, getUserById } from "../services/user.service";
+import * as userService from "../services/user.service";
 import { IUser } from "../interfaces/interface";
 
 export const Login = async (req: Request, res: Response): Promise<IUser | any> => {
@@ -21,7 +21,7 @@ export const Login = async (req: Request, res: Response): Promise<IUser | any> =
         if (password.length < 8) {
             return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
         }
-        const result = await loginByMail(email, password);
+        const result = await userService.loginByMail(email, password);
         res.status(200).json(result);
     } catch (error: any) {
         console.error('Login error:', error);
@@ -51,7 +51,7 @@ export const GoogleLogin = async (req: Request, res: Response): Promise<IUser | 
         }
 
         try {
-            const result = await loginByGoogle(googleId);
+            const result = await userService.loginByGoogle(googleId);
             res.status(200).json(result);
         } catch (loginError: any) {
             console.error('Google Login error:', loginError);
@@ -96,7 +96,7 @@ export const Register = async (req: Request, res: Response): Promise<IUser | any
         }
 
         const userData = { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } as IUser;
-        const result = await register(userData);
+        const result = await userService.register(userData);
         res.status(result.success ? 201 : 400).json(result);
     } catch (error) {
         console.error('Sign up error:', error);
@@ -108,7 +108,7 @@ export const Register = async (req: Request, res: Response): Promise<IUser | any
 export const GetUserById = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { id } = req.params;
-        const user = await getUserById(id);
+        const user = await userService.getUserById(id);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -123,7 +123,7 @@ export const GetUserById = async (req: Request, res: Response): Promise<IUser | 
 export const GetUserByUId = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { uid } = req.params;
-        const user = await getUserByUId(uid);
+        const user = await userService.getUserByUId(uid);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -139,7 +139,7 @@ export const UpdateUser = async (req: Request, res: Response): Promise<IUser | a
     try {
         const { id } = req.params;
         const userData = req.body;
-        const updatedUser = await updateUser(id, userData);
+        const updatedUser = await userService.updateUser(id, userData);
         if (!updatedUser) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -154,7 +154,7 @@ export const UpdateUser = async (req: Request, res: Response): Promise<IUser | a
 export const DeleteUser = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { id } = req.params;
-        const result = await deleteUser(id);
+        const result = await userService.deleteUser(id);
         if (!result.success) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -168,7 +168,7 @@ export const DeleteUser = async (req: Request, res: Response): Promise<IUser | a
 
 export const GetAllUsers = async (req: Request, res: Response): Promise<IUser[] | any> => {
     try {
-        const users = await getAllUsers();
+        const users = await userService.getAllUsers();
         res.status(200).json({ success: true, message: "Users fetched successfully", users });
     } catch (error: any) {
         console.error('Error fetching users:', error);
@@ -179,7 +179,7 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<IUser[] 
 export const GetUserByMail = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { email } = req.params;
-        const user = await getUserByEmail(email);
+        const user = await userService.getUserByEmail(email);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -194,7 +194,7 @@ export const GetUserByMail = async (req: Request, res: Response): Promise<IUser 
 export const GetUserByPhoneNumber = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { phoneNumber } = req.params;
-        const user = await getUserByPhoneNumber(phoneNumber);
+        const user = await userService.getUserByPhoneNumber(phoneNumber);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -209,7 +209,7 @@ export const GetUserByPhoneNumber = async (req: Request, res: Response): Promise
 export const GetUserByGoogleId = async (req: Request, res: Response): Promise<IUser | any> => {
     try {
         const { googleId } = req.params;
-        const user = await getUserByGoogleId(googleId);
+        const user = await userService.getUserByGoogleId(googleId);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerInstructor, loginInstructor, getInstructorById, updateInstructor, deleteInstructor, getAllInstructors } from "../services/instructor.service";
+import * as instructorService from "../services/instructor.service";
 import { IInstructor } from "../interfaces/interface";
 
 export const LoginInstructor = async (req: Request, res: Response): Promise<IInstructor | any> => {
@@ -21,7 +21,7 @@ export const LoginInstructor = async (req: Request, res: Response): Promise<IIns
         if (password.length < 8) {
             return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
         }
-        const result = await loginInstructor(email, password);
+        const result = await instructorService.loginInstructor(email, password);
         res.status(200).json(result);
     } catch (error: any) {
         console.error('Login error:', error);
@@ -60,8 +60,8 @@ export const RegisterInstructor = async (req: Request, res: Response): Promise<I
             return res.status(400).json({ success: false, message: "Invalid phone number format" });
         }
         const instructorData = { firstname, lastname, email, password, phoneNumber, googleId, profileImageUrl } as IInstructor;
-        const result = await registerInstructor(instructorData);
-        res.status(result.success ? 201 : 400).json(result);
+        const result = await instructorService.registerInstructor(instructorData);
+        res.status(result.success ? 201 : 400).json({ message: "Instructor created successfully", result });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -69,7 +69,7 @@ export const RegisterInstructor = async (req: Request, res: Response): Promise<I
 
 export const GetAllInstructors = async (req: Request, res: Response): Promise<IInstructor[] | any> => {
     try {
-        const instructors = await getAllInstructors();
+        const instructors = await instructorService.getAllInstructors();
         res.status(200).json({ success: true, message: "Instructors fetched successfully", instructors });
     } catch (error: any) {
         console.error('Error fetching instructors:', error);
@@ -80,7 +80,7 @@ export const GetAllInstructors = async (req: Request, res: Response): Promise<II
 export const GetInstructorById = async (req: Request, res: Response): Promise<IInstructor | any> => {
     try {
         const { id } = req.params;
-        const instructor = await getInstructorById(id);
+        const instructor = await instructorService.getInstructorById(id);
         if (!instructor) {
             return res.status(404).json({ success: false, message: "instructor not found" });
         }
@@ -96,7 +96,7 @@ export const UpdateInstructor = async (req: Request, res: Response): Promise<IIn
     try {
         const { id } = req.params;
         const instructorData = req.body;
-        const updatedInstructor = await updateInstructor(id, instructorData);
+        const updatedInstructor = await instructorService.updateInstructor(id, instructorData);
         if (!updatedInstructor) {
             return res.status(404).json({ success: false, message: "Instructor not found" });
         }
@@ -111,7 +111,7 @@ export const UpdateInstructor = async (req: Request, res: Response): Promise<IIn
 export const DeleteInstructor = async (req: Request, res: Response): Promise<IInstructor | any> => {
     try {
         const { id } = req.params;
-        const result = await deleteInstructor(id);
+        const result = await instructorService.deleteInstructor(id);
         if (!result.success) {
             return res.status(404).json({ success: false, message: "Instructor not found" });
         }

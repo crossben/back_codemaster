@@ -1,12 +1,9 @@
-import { ICourse } from "../interfaces/interface";
+import { ICourse, IRessource } from "../interfaces/interface";
 import { Course } from "../schemas/courses.schema";
 
 export const createCourse = async (courseData: ICourse) => {
     try {
         const { title, description, instructor, price, category, level, duration, imageUrl, resources } = courseData;
-        if (!title || !description || !instructor || !price || !category || !level || !duration || !imageUrl) {
-            throw new Error("All these fields are required");
-        }
 
         const newCourse = new Course({
             uid: crypto.randomUUID(),
@@ -92,16 +89,15 @@ export const addQuizToCourse = async (courseId: string, quizData: any) => {
     }
 };
 
-export const addResourceToCourse = async (courseId: string, resourceData: any) => {
+export const addResourceToCourse = async (courseId: string, resourceData: IRessource) => {
     try {
-        const { title, type, url } = resourceData;
-        if (!title || !type || !url) {
-            throw new Error("All fields (title, type, and url) are required");
+        const { title, url } = resourceData;
+        if (!title || !url) {
+            throw new Error("All fields (title, and url) are required");
         }
 
         const newResource = {
             title,
-            type,
             url
         };
 

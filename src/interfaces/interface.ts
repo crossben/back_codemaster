@@ -20,6 +20,10 @@ export interface IModule extends Document {
     description?: string;
     contenu?: string;
 }
+export interface IRessource extends Document {
+    title: string;
+    url?: string;
+}
 
 export interface ICourse extends Document {
     uid: any;
@@ -44,11 +48,7 @@ export interface ICourse extends Document {
             correctAnswer: string;
         }[];
     }[];
-    resources: {
-        title: string;
-        type: string;
-        url: string;
-    }[];
+    resources: IRessource[] | undefined;
 }
 
 export interface IInstructor extends Document {

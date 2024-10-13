@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 import { ICourse } from "../interfaces/interface";
 
 
@@ -73,24 +73,11 @@ const courseSchema = new Schema<ICourse>({
             },
         }],
     }],
-    resources: [{
-        title: {
-            type: String,
-            required: true,
-        },
-        type: {
-            type: String,
-            required: true,
-        },
-        url: {
-            type: String,
-            required: true,
-        },
-    }],
+    resources: { type: Schema.Types.Array },
 }, {
     timestamps: true,
 });
 
-export const Course = model<ICourse>("Course", courseSchema);
+export const Course: Model<ICourse> = model<ICourse>("Course", courseSchema);
 
 
