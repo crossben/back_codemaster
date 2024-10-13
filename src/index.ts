@@ -7,11 +7,12 @@
 import express, { NextFunction } from 'express';
 import { Request, Response } from 'express';
 import Dbconnect from './config/mongo.config';
-export const app = express();
 import cors from 'cors';
 import helmet from 'helmet';
 import userRoutes from './routes/user.route';
 import instructorRoutes from './routes/instructor.route';
+
+export const app = express();
 // Connect to the MongoDB database
 Dbconnect();
 

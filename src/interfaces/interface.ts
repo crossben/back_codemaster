@@ -15,6 +15,12 @@ export interface IUser extends Document {
     phoneNumberVerified?: boolean;
 }
 
+export interface IModule extends Document {
+    name: string;
+    description?: string;
+    contenu?: string;
+}
+
 export interface ICourse extends Document {
     uid: any;
     title: string;
@@ -24,16 +30,12 @@ export interface ICourse extends Document {
     category: string;
     level: string;
     duration: string;
-    instructor: string;
+    instructor: IInstructor['_id'];
     enrolledStudents: number;
     rating: number;
     requirements: string[];
     learningObjectives: string[];
-    modules: {
-        title: string;
-        content: string;
-        duration: string;
-    }[];
+    modules: IModule[] | undefined;
     quizzes: {
         title: string;
         questions: {

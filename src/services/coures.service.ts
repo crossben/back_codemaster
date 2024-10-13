@@ -4,8 +4,8 @@ import { Course } from "../schemas/courses.schema";
 export const createCourse = async (courseData: ICourse) => {
     try {
         const { title, description, instructor, price, category, level, duration, imageUrl, resources } = courseData;
-        if (!title || !description || !instructor || !price || !category || !level || !duration || !imageUrl || !resources) {
-            throw new Error("All fields are required");
+        if (!title || !description || !instructor || !price || !category || !level || !duration || !imageUrl) {
+            throw new Error("All these fields are required");
         }
 
         const newCourse = new Course({
@@ -27,14 +27,27 @@ export const createCourse = async (courseData: ICourse) => {
     }
 };
 
-export const addModuleToCourse = async (courseId: string, moduleData: any) => {
+export const addModuleToCourse = async (id: any, courseData: Partial<ICourse>) => {
     try {
-        const { title, content, duration } = moduleData;
-        if (!title || !content || !duration) {
-            throw new Error("All fields are required");
+        if (courseData.modules) {
+            const updatedCourse = await Course.findByIdAndUpdate(
+                id,
+                {
+                    $push: { modules: { $each: courseData.modules } }
+                },
+                { new: true }
+            );
+            if (!updatedCourse) {
+                throw new Error("Course not found");
+            }
+            return { success: true, message: "Modules added successfully", course: updatedCourse };
+        } else {
+            const updatedCourse = await Course.findByIdAndUpdate(id, courseData, { new: true });
+            if (!updatedCourse) {
+                throw new Error("Course not found");
+            }
+            return { success: true, message: "Course updated successfully", course: updatedCourse };
         }
-        const course = await Course.findByIdAndUpdate(courseId, { $push: { modules: module } }, { new: true });
-        return { success: true, message: "module added successfully", course: course };
     } catch (error) {
         throw error;
     }

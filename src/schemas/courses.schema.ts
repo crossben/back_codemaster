@@ -35,10 +35,7 @@ const courseSchema = new Schema<ICourse>({
         type: String,
         required: true,
     },
-    instructor: {
-        type: String,
-        required: true,
-    },
+    instructor: { type: Schema.Types.ObjectId, ref: 'users', required: true },
     enrolledStudents: {
         type: Number,
         default: 0,
@@ -55,20 +52,7 @@ const courseSchema = new Schema<ICourse>({
         type: [String],
         default: [],
     },
-    modules: [{
-        title: {
-            type: String,
-            required: true,
-        },
-        content: {
-            type: String,
-            required: true,
-        },
-        duration: {
-            type: String,
-            required: true,
-        },
-    }],
+    modules: { type: Schema.Types.Array },
     quizzes: [{
         title: {
             type: String,
