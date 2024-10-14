@@ -4,13 +4,16 @@
  * establishes database connection, and defines basic routes.
  */
 
-import express, { NextFunction } from 'express';
+import express, { NextFunction, Router } from 'express';
 import { Request, Response } from 'express';
 import Dbconnect from './config/mongo.config';
 import cors from 'cors';
 import helmet from 'helmet';
 import userRoutes from './routes/user.route';
 import instructorRoutes from './routes/instructor.route';
+import ServerlessHttp from 'serverless-http';
+
+const router = Router();
 
 export const app = express();
 // Connect to the MongoDB database
@@ -20,8 +23,8 @@ Dbconnect();
 const port = process.env.PORT;
 
 // Middleware setup
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
 // Configure CORS for cross-origin requests
@@ -63,3 +66,6 @@ app.listen(port, () => {
  * 6. Set up unit and integration tests
  * 7. Consider using a process manager like PM2 for production deployment
  */
+
+app.use('./.netlify/functions/api', router)
+module.exports.handler = ServerlessHttp(app)

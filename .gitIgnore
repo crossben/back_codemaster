@@ -3,3 +3,5 @@ node_modules
 ./somewhere_over_the_rainbow/.gitIgnore
 
 .env
+# Local Netlify folder
+.netlify
