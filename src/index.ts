@@ -11,9 +11,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import userRoutes from './routes/user.route';
 import instructorRoutes from './routes/instructor.route';
-import ServerlessHttp from 'serverless-http';
 
-const router = Router();
 
 export const app = express();
 // Connect to the MongoDB database
@@ -66,6 +64,3 @@ app.listen(port, () => {
  * 6. Set up unit and integration tests
  * 7. Consider using a process manager like PM2 for production deployment
  */
-
-app.use('./.netlify/functions/api', router)
-module.exports.handler = ServerlessHttp(app)
