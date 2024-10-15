@@ -8,10 +8,9 @@ import express, { NextFunction, Router } from 'express';
 import { Request, Response } from 'express';
 import Dbconnect from './config/mongo.config';
 import cors from 'cors';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 import userRoutes from './routes/user.route';
 import instructorRoutes from './routes/instructor.route';
-
 
 export const app = express();
 // Connect to the MongoDB database
@@ -23,7 +22,7 @@ const port = process.env.PORT;
 // Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+// app.use(helmet());
 
 // Configure CORS for cross-origin requests
 app.use(
@@ -48,6 +47,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
     res.status(500).send('An error occurred!');
 });
+
+app.get('/', (req: Request, res: Response) => {
+    res.send('hello world')
+})
 
 // Start the server
 app.listen(port, () => {
