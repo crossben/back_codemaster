@@ -11,6 +11,7 @@ import cors from 'cors';
 // import helmet from 'helmet';
 import userRoutes from './routes/user.route';
 import instructorRoutes from './routes/instructor.route';
+import coursesRoutes from './routes/course.route';
 
 export const app = express();
 // Connect to the MongoDB database
@@ -27,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // Configure CORS for cross-origin requests
 app.use(
     cors({
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:5173"],
         methods: ["*"],
         credentials: true,
     })
@@ -36,6 +37,7 @@ app.use(
 // User Routes
 app.use(`${process.env.API_PREFIX}/user`, userRoutes);
 app.use(`${process.env.API_PREFIX}/instructor`, instructorRoutes);
+app.use(`${process.env.API_PREFIX}/course`, coursesRoutes);
 
 // Define a simple root route
 app.get(`${process.env.API_PREFIX}/`, (res: Response) => {

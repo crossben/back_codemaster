@@ -17,25 +17,28 @@ const courseSchema = new Schema<ICourse>({
     },
     imageUrl: {
         type: String,
-        required: true,
+        default: "https://i.imgur.com/x7HadsA.png"
     },
     price: {
         type: Number,
-        required: true,
+        default: 0,
     },
     category: {
         type: String,
-        required: true,
+        default: "General",
     },
     level: {
         type: String,
-        required: true,
+        default: "Beginner",
     },
     duration: {
         type: String,
-        required: true,
+        default: "1 month",
     },
-    instructor: { type: Schema.Types.ObjectId, ref: 'users', required: true },
+    instructor: {
+        type: Schema.Types.ObjectId, ref: 'users',
+        required: true
+    },
     enrolledStudents: {
         type: Number,
         default: 0,
@@ -52,7 +55,10 @@ const courseSchema = new Schema<ICourse>({
         type: [String],
         default: [],
     },
-    modules: { type: Schema.Types.Array },
+    modules: {
+        type: Schema.Types.Array,
+        default: [],
+    },
     quizzes: [{
         title: {
             type: String,
@@ -72,8 +78,12 @@ const courseSchema = new Schema<ICourse>({
                 required: true,
             },
         }],
+        default: [],
     }],
-    resources: { type: Schema.Types.Array },
+    resources: {
+        type: Schema.Types.Array,
+        default: [],
+    },
 }, {
     timestamps: true,
 });

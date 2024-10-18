@@ -6,7 +6,7 @@ interface CustomRequest extends Request {
 }
 
 
-const Auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
+const Auth = async (req: CustomRequest, res: Response, next: NextFunction): Promise<any> => {
     try {
         const firebaseToken = req.headers.authorization?.split(" ")[1];
 

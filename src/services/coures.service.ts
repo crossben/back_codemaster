@@ -1,9 +1,26 @@
 import { ICourse, IRessource } from "../interfaces/interface";
 import { Course } from "../schemas/courses.schema";
 
+
 export const createCourse = async (courseData: ICourse) => {
     try {
-        const { title, description, instructor, price, category, level, duration, imageUrl, resources } = courseData;
+        const {
+            title,
+            description,
+            instructor,
+            price,
+            category,
+            level,
+            duration,
+            imageUrl,
+            enrolledStudents,
+            rating,
+            requirements,
+            learningObjectives,
+            modules,
+            quizzes,
+            resources
+        } = courseData;
 
         const newCourse = new Course({
             uid: crypto.randomUUID(),
@@ -15,8 +32,15 @@ export const createCourse = async (courseData: ICourse) => {
             level,
             duration,
             imageUrl,
+            enrolledStudents,
+            rating,
+            requirements,
+            learningObjectives,
+            modules,
+            quizzes,
             resources
         });
+
         const result = await newCourse.save();
         return { success: true, message: "Course created successfully", course: result };
     } catch (error) {
@@ -127,3 +151,46 @@ export const getAllCourses = async () => {
         throw error;
     }
 };
+
+
+export const getCourseById = async (id: string) => {
+    try {
+        const course = await Course.findById(id);
+        return course;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateCourse = async (id: string, courseData: Partial<ICourse>) => {
+    try {
+        const updatedCourse = await Course.findByIdAndUpdate(id, courseData, { new: true });
+        if (!updatedCourse) {
+            throw new Error("Course not found");
+        }
+        return { success: true, message: "Course updated successfully", course: updatedCourse };
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getCoursesByInstructorId = async (id: any) => {
+    try {
+        const courses = await Course.find({ instructor: id });
+        return courses;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deleteCourse = async (id: string) => {
+    try {
+        const course = await Course.findByIdAndDelete(id);
+        if (!course) {
+            throw new Error("Course not found");
+        }
+        return { success: true, message: "Course deleted successfully" };
+    } catch (error) {
+        throw error;
+    }
+}

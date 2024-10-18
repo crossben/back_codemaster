@@ -35,12 +35,12 @@ export interface ICourse extends Document {
     level: string;
     duration: string;
     instructor: IInstructor['_id'];
-    enrolledStudents: number;
-    rating: number;
-    requirements: string[];
-    learningObjectives: string[];
-    modules: IModule[] | undefined;
-    quizzes: {
+    enrolledStudents?: number;
+    rating?: number;
+    requirements?: string[];
+    learningObjectives?: string[];
+    modules?: IModule[] | undefined;
+    quizzes?: {
         title: string;
         questions: {
             question: string;
@@ -48,7 +48,7 @@ export interface ICourse extends Document {
             correctAnswer: string;
         }[];
     }[];
-    resources: IRessource[] | undefined;
+    resources?: IRessource[] | undefined;
 }
 
 export interface IInstructor extends Document {

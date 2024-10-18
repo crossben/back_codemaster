@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { GetAllUsers, GoogleLogin, Login, Register, GetUserById, GetUserByMail, GetUserByPhoneNumber, GetUserByGoogleId, DeleteUser, UpdateUser } from "../controllers/user.controller";
+import { guard } from "../middlewares/guard.middleware";
 
 const router = Router();
 
@@ -17,30 +18,30 @@ router.post("/google-login-api", GoogleLogin);
 
 // Get all users (admin function)
 // localhost:2002/api/user/
-router.get("/", GetAllUsers);
+router.get("/", guard, GetAllUsers);
 
 // Get user by UID
 // localhost:2002/api/user/id/:id
-router.get("/id/:id", GetUserById);
+router.get("/id/:id", guard, GetUserById);
 
 // Get user by email
 // localhost:2002/api/user/email/:email
-router.get("/email/:email", GetUserByMail);
+router.get("/email/:email", guard, GetUserByMail);
 
 // Get user by phone number
 // localhost:2002/api/user/phone-number/:phoneNumber
-router.get("/phone-number/:phoneNumber", GetUserByPhoneNumber);
+router.get("/phone-number/:phoneNumber", guard, GetUserByPhoneNumber);
 
 // Get user by Google ID
 // localhost:2002/api/user/google-id/:googleId
-router.get("/google-id/:googleId", GetUserByGoogleId);
+router.get("/google-id/:googleId", guard, GetUserByGoogleId);
 
 // Delete user by UID
 // localhost:2002/api/user/delete/:id
-router.delete("/delete/:id", DeleteUser);
+router.delete("/delete/:id", guard, DeleteUser);
 
 // Update user information by UID
 // localhost:2002/api/user/update/:id
-router.put("/update/:id", UpdateUser);
+router.put("/update/:id", guard, UpdateUser);
 
 export default router;

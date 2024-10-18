@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { LoginInstructor, RegisterInstructor, GetInstructorById, UpdateInstructor, DeleteInstructor, GetAllInstructors } from "../controllers/instructor.controller";
+import { guard } from "../middlewares/guard.middleware";
+
 
 const router = Router();
 
@@ -13,19 +15,19 @@ router.post('/register-api', RegisterInstructor);
 
 // Get all instructors route
 // localhost:2002/api/instructor/
-router.get('/', GetAllInstructors);
+router.get('/', guard, GetAllInstructors);
 
 // Get instructor by ID route
 // localhost:2002/api/instructor/id/:id
-router.get('/id/:id', GetInstructorById);
+router.get('/id/:id', guard, GetInstructorById);
 
 // Update instructor route
 // localhost:2002/api/instructor/update/:id
-router.put('/update/:id', UpdateInstructor);
+router.put('/update/:id', guard, UpdateInstructor);
 
 // Delete instructor route
 // localhost:2002/api/instructor/delete/:id
-router.delete('/delete/:id', DeleteInstructor);
+router.delete('/delete/:id', guard, DeleteInstructor);
 
 
 export default router;

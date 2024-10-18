@@ -4,7 +4,7 @@ interface CustomRequest extends Request {
     user?: any;
 }
 
-export const guard = (req: CustomRequest, res: Response, next: NextFunction) => {
+export const guard = async (req: CustomRequest, res: Response, next: NextFunction): Promise<any> => {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -16,9 +16,11 @@ export const guard = (req: CustomRequest, res: Response, next: NextFunction) => 
         }
         const decoded = verify(token, jwtSecret);
         req.user = decoded;
-        next();
+
+        return next();
     } catch (error) {
-        return res.status(401).json({ message: "Unauthorized" });
+        // return res.status(401).json({ message: "Unauthorized" });
+        res.sendStatus(401);
     }
 };
 

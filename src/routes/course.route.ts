@@ -1,39 +1,40 @@
-// import express from 'express';
-// import {
-//     createCourse,
-//     getCourseById,
-//     updateCourse,
-//     deleteCourse,
-//     getAllCourses,
-//     addModuleToCourse,
-//     addQuizToCourse,
-//     addResourceToCourse
-// } from '../controllers/course.controller';
+import express from 'express';
+import {
+    CreateCourse,
+    GetCourseById,
+    UpdateCourse,
+    DeleteCourse,
+    GetAllCourses,
+    AddModuleToCourse,
+    AddQuizToCourse,
+    AddResourceToCourse
+} from '../controllers/course.controller';
+import { guard } from '../middlewares/guard.middleware';
 
-// const router = express.Router();
+const router = express.Router();
 
-// // Create a new course
-// router.post('/', createCourse);
+// Create a new course
+router.post('/create', CreateCourse);
 
-// // Get all courses
-// router.get('/', getAllCourses);
+// Get all courses
+router.get('/', GetAllCourses);
 
-// // Get a specific course by ID
-// router.get('/:id', getCourseById);
+// Get a specific course by ID
+router.get('/:id', guard, GetCourseById);
 
-// // Update a course
-// router.put('/:id', updateCourse);
+// Update a course
+router.put('/:id', guard, UpdateCourse);
 
-// // Delete a course
-// router.delete('/:id', deleteCourse);
+// Delete a course
+router.delete('/:id', guard, DeleteCourse);
 
-// // Add a module to a course
-// router.post('/:id/modules', addModuleToCourse);
+// Add a module to a course
+router.post('/:id/modules', guard, AddModuleToCourse);
 
-// // Add a quiz to a course
-// router.post('/:id/quizzes', addQuizToCourse);
+// Add a quiz to a course
+router.post('/:id/quizzes', guard, AddQuizToCourse);
 
-// // Add a resource to a course
-// router.post('/:id/resources', addResourceToCourse);
+// Add a resource to a course
+router.post('/:id/resources', guard, AddResourceToCourse);
 
-// export default router;
+export default router;
