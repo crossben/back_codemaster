@@ -50,29 +50,37 @@ export const createCourse = async (courseData: ICourse) => {
 
 export const addModuleToCourse = async (id: any, courseData: Partial<ICourse>) => {
     try {
-        if (courseData.modules) {
+        // Vérifier si des modules sont présents dans courseData
+        if (courseData.modules && courseData.modules.length > 0) {
+            // Ajouter les modules au cours en utilisant l'opérateur $push avec $each
             const updatedCourse = await Course.findByIdAndUpdate(
                 id,
-                {
-                    $push: { modules: { $each: courseData.modules } }
-                },
+                { $push: { modules: { $each: courseData.modules } } },
                 { new: true }
             );
+
+            // Vérifier si le cours existe
             if (!updatedCourse) {
                 throw new Error("Course not found");
             }
+
             return { success: true, message: "Modules added successfully", course: updatedCourse };
         } else {
+            // Si les modules ne sont pas présents, mettre à jour les autres champs du cours
             const updatedCourse = await Course.findByIdAndUpdate(id, courseData, { new: true });
+
             if (!updatedCourse) {
                 throw new Error("Course not found");
             }
+
             return { success: true, message: "Course updated successfully", course: updatedCourse };
         }
-    } catch (error) {
-        throw error;
+    } catch (error: any) {
+        // Lancer une erreur en cas de problème
+        throw new Error(`Error updating course: ${error.message}`);
     }
 };
+
 
 export const addQuizToCourse = async (courseId: string, quizData: any) => {
     try {
@@ -113,31 +121,34 @@ export const addQuizToCourse = async (courseId: string, quizData: any) => {
     }
 };
 
-export const addResourceToCourse = async (courseId: string, resourceData: IRessource) => {
+export const addResourceToCourse = async (id: any, courseData: ICourse) => {
     try {
-        const { title, url } = resourceData;
-        if (!title || !url) {
-            throw new Error("All fields (title, and url) are required");
+        if (courseData.resources && courseData.resources.length > 0) {
+            const updatedCourse = await Course.findByIdAndUpdate(
+                id,
+                { $push: { resources: { $each: courseData.resources } } },
+                { new: true }
+            );
+
+            // Vérifier si le cours existe
+            if (!updatedCourse) {
+                throw new Error("Course not found");
+            }
+
+            return { success: true, message: "Resource added successfully", course: updatedCourse };
+        } else {
+            // Si les Resource ne sont pas présents, mettre à jour les autres champs du cours
+            const updatedCourse = await Course.findByIdAndUpdate(id, courseData, { new: true });
+
+            if (!updatedCourse) {
+                throw new Error("Course not found");
+            }
+
+            return { success: true, message: "Course updated successfully", course: updatedCourse };
         }
-
-        const newResource = {
-            title,
-            url
-        };
-
-        const course = await Course.findByIdAndUpdate(
-            courseId,
-            { $push: { resources: newResource } },
-            { new: true }
-        );
-
-        if (!course) {
-            throw new Error("Course not found");
-        }
-
-        return { success: true, message: "Resource added successfully", course: course };
-    } catch (error) {
-        throw error;
+    } catch (error: any) {
+        // Lancer une erreur en cas de problème
+        throw new Error(`Error updating course: ${error.message}`);
     }
 };
 
