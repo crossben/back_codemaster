@@ -27,10 +27,12 @@ const userSchema = new Schema<IUser>({
     phoneNumber: {
         type: String,
         required: false,
+        default: "",
     },
     googleId: {
         type: String,
         required: false,
+        default: "",
     },
     password: {
         type: String,
@@ -49,6 +51,7 @@ const userSchema = new Schema<IUser>({
     },
     enrolledToCourses: {
         type: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+        default: [],
         required: false,
     },
 }, {

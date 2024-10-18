@@ -20,7 +20,9 @@ export const registerInstructor = async (instructorData: IInstructor): Promise<I
             password,
             phoneNumber,
             googleId,
-            profileImageUrl
+            profileImageUrl,
+            role: "instructor", // Default role
+            courses: [] // Initialize with an empty array
         });
         const result = await newInstructor.save();
         return { success: true, message: "Instructor created successfully", instructor: result };

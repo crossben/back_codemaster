@@ -86,14 +86,7 @@ export const loginByMail = async (email: string, password: string): Promise<IUse
             success: true,
             message: "User logged in successfully",
             token: token,
-            user: {
-                id: user._id,
-                uid: user.uid,
-                email: user.email,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                phoneNumber: user.phoneNumber,
-            }
+            user
         };
     } catch (error) {
         console.error('Login error:', error);
@@ -120,7 +113,9 @@ export const register = async (userData: IUser): Promise<IUser | any> => {
             password,
             phoneNumber,
             googleId,
-            profileImageUrl
+            profileImageUrl,
+            role: "student", // Default role
+            enrolledToCourses: [] // Initialize with an empty array
         });
 
         await newUser.save();
@@ -135,18 +130,11 @@ export const register = async (userData: IUser): Promise<IUser | any> => {
             success: true,
             message: "User created successfully",
             token: token,
-            user: {
-                id: newUser._id,
-                uid: newUser.uid,
-                email: newUser.email,
-                firstname: newUser.firstname,
-                lastname: newUser.lastname,
-                phoneNumber: newUser.phoneNumber,
-            }
-        };
-    } catch (error) {
-        console.error('SignUp error:', error);
-        return { success: false, message: "Error creating user" };
+            user: newUser // Corrected to use newUser instead of user
+
+        }
+    } catch (error: any) {
+        throw error;
     }
 }
 
@@ -165,16 +153,7 @@ export const loginByGoogle = async (googleId: string): Promise<IUser | any> => {
             success: true,
             message: "User logged in successfully",
             token: token,
-            user: {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            }
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Login error:', error);
@@ -197,16 +176,7 @@ export const getUserById = async (id: any): Promise<IUser | any> => {
             success: true,
             message: "User fetched successfully",
             // token: token,
-            user: user ? {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            } : null
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Error fetching user:', error);
@@ -228,16 +198,7 @@ export const getUserByUId = async (uid: any): Promise<IUser | any> => {
             success: true,
             message: "User fetched successfully",
             // token: token,
-            user: user ? {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            } : null
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Error fetching user:', error);
@@ -260,16 +221,7 @@ export const updateUser = async (id: any, userData: IUser): Promise<IUser | any>
             success: true,
             message: "User fetched successfully",
             token: token,
-            user: {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            }
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Error updating user:', error);
@@ -315,16 +267,7 @@ export const getUserByEmail = async (email: string): Promise<IUser | any> => {
             success: true,
             message: "User fetched successfully",
             token: token,
-            user: {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            }
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Error fetching user by email:', error);
@@ -347,16 +290,7 @@ export const getUserByPhoneNumber = async (phoneNumber: any): Promise<IUser | an
             success: true,
             message: "User fetched successfully",
             token: token,
-            user: user ? {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            } : null
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Error fetching user by phone number:', error);
@@ -379,16 +313,7 @@ export const getUserByGoogleId = async (googleId: any): Promise<IUser | any> => 
             success: true,
             message: "User fetched successfully",
             token: token,
-            user: {
-                id: user._id,
-                uid: user.uid,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                googleId: user.googleId,
-                profileImageUrl: user.profileImageUrl
-            }
+            user: user ? user : null
         };
     } catch (error) {
         console.error('Error fetching user by Google ID:', error);
