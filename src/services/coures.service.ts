@@ -82,42 +82,35 @@ export const addModuleToCourse = async (id: any, courseData: Partial<ICourse>) =
 };
 
 
-export const addQuizToCourse = async (courseId: string, quizData: any) => {
+export const addQuizToCourse = async (id: string, courseData: Partial<ICourse>) => {
     try {
-        const { title, questions } = quizData;
-        if (!title || !questions || !Array.isArray(questions) || questions.length === 0) {
-            throw new Error("Title and at least one question are required");
-        }
+        if (courseData.quizzes && courseData.quizzes.length > 0) {
+            // Ajouter les modules au cours en utilisant l'opérateur $push avec $each
+            const updatedCourse = await Course.findByIdAndUpdate(
+                id,
+                { $push: { quizzes: { $each: courseData.quizzes } } },
+                { new: true }
+            );
 
-        // Validate each question
-        questions.forEach(question => {
-            if (!question.question || !Array.isArray(question.options) || question.options.length === 0 || !question.correctAnswer) {
-                throw new Error("Each question must have a question text, options, and a correct answer");
+            // Vérifier si le cours existe
+            if (!updatedCourse) {
+                throw new Error("Course not found");
             }
-        });
 
-        const newQuiz = {
-            title,
-            questions: questions.map(q => ({
-                question: q.question,
-                options: q.options,
-                correctAnswer: q.correctAnswer
-            }))
-        };
+            return { success: true, message: "Quizzes added successfully", course: updatedCourse };
+        } else {
+            // Si les quizzes ne sont pas présents, mettre à jour les autres champs du cours
+            const updatedCourse = await Course.findByIdAndUpdate(id, courseData, { new: true });
 
-        const course = await Course.findByIdAndUpdate(
-            courseId,
-            { $push: { quizzes: newQuiz } },
-            { new: true }
-        );
+            if (!updatedCourse) {
+                throw new Error("Course not found");
+            }
 
-        if (!course) {
-            throw new Error("Course not found");
+            return { success: true, message: "Course updated successfully", course: updatedCourse };
         }
-
-        return { success: true, message: "Quiz added successfully", course: course };
-    } catch (error) {
-        throw error;
+    } catch (error: any) {
+        // Lancer une erreur en cas de problème
+        throw new Error(`Error updating course: ${error.message}`);
     }
 };
 

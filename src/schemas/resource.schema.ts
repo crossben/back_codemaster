@@ -1,4 +1,4 @@
-import mongoose, { Model, mongo, Schema } from "mongoose";
+import { model, Model, mongo, Schema } from "mongoose";
 import { IRessource } from "../interfaces/interface";
 
 const ressourceSchema = new Schema<IRessource>({
@@ -12,4 +12,4 @@ const ressourceSchema = new Schema<IRessource>({
     },
 })
 
-export const Ressource: Model<IRessource> = mongoose.model<IRessource>('Ressources', ressourceSchema)
+export const Ressource: Model<IRessource> =  model<IRessource>('Ressources', ressourceSchema)

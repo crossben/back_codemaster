@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import mongoose, { Model, Schema } from "mongoose"
+import { model, Model, Schema } from "mongoose"
 import { IUser } from "../interfaces/interface"
 
 /**
@@ -84,7 +84,7 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
  * Mongoose model for User documents.
  * Used for CRUD operations on the 'User' collection in MongoDB.
  */
-export const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
+export const User: Model<IUser> = model<IUser>('User', userSchema);
 
 /**
  * TODO for future developers:

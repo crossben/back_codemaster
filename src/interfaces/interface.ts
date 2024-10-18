@@ -25,6 +25,15 @@ export interface IRessource extends Document {
     url?: string;
 }
 
+export interface IQuiz extends Document {
+    title: string;
+    questions: {
+        correctAnswer: string;
+        question: string;
+        options: string[];
+    };
+}
+
 export interface ICourse extends Document {
     uid: any;
     title: string;
@@ -40,14 +49,7 @@ export interface ICourse extends Document {
     requirements?: string[];
     learningObjectives?: string[];
     modules?: IModule[] | undefined;
-    quizzes?: {
-        title: string;
-        questions: {
-            question: string;
-            options: string[];
-            correctAnswer: string;
-        }[];
-    }[];
+    quizzes?: IQuiz[];
     resources?: IRessource[] | undefined;
 }
 

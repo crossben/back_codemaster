@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import { Schema, Model, model } from 'mongoose';
 import { IModule } from '../interfaces/interface';
 
 // Define the schema with validation
@@ -19,4 +19,4 @@ moduleSchema.pre<IModule>('save', function (next) {
 });
 
 // Create the model
-export const Module: Model<IModule> = mongoose.model<IModule>('Modules', moduleSchema);
+export const Module: Model<IModule> = model<IModule>('Modules', moduleSchema);

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import mongoose, { Model, Schema } from "mongoose";
+import { model, Model, Schema } from "mongoose";
 import { IInstructor } from "../interfaces/interface";
 
 const instructorSchema = new Schema<IInstructor>({
@@ -77,4 +77,4 @@ instructorSchema.methods.comparePassword = async function (candidatePassword: st
  * Mongoose model for User documents.
  * Used for CRUD operations on the 'User' collection in MongoDB.
  */
-export const Instructor: Model<IInstructor> = mongoose.model<IInstructor>('Instructor', instructorSchema);
+export const Instructor: Model<IInstructor> = model<IInstructor>('Instructor', instructorSchema);
