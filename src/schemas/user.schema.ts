@@ -50,8 +50,8 @@ const userSchema = new Schema<IUser>({
         immutable: true,
     },
     enrolledToCourses: {
-        type: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
-        default: [],
+        type: [Schema.Types.ObjectId],
+        ref: 'Course',
         required: false,
     },
 }, {

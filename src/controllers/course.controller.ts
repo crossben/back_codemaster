@@ -1,6 +1,6 @@
 import * as courseService from '../services/coures.service'; // Importing course service for course creation
 import { Request, Response, NextFunction } from 'express'; // Importing Express types for request and response handling
-import { ICourse } from '../interfaces/interface'; // Importing ICourse interface for course data type
+import { ICourse, IEnrolledCourse, IModule, IQuiz, IRessource } from '../interfaces/interface'; // Importing ICourse interface for course data type
 
 // Function to create a new course
 export const CreateCourse = async (req: Request, res: Response): Promise<ICourse | any> => {
@@ -122,7 +122,7 @@ export const GetCoursesByInstructorId = async (req: Request, res: Response): Pro
 }
 
 
-export const DeleteCourse = async (req: Request, res: Response): Promise<ICourse | any> => {
+export const DeleteCourse = async (req: Request, res: Response): Promise<any> => {
     try {
         // Extracting course id from request params
         const { id } = req.params;
@@ -135,7 +135,7 @@ export const DeleteCourse = async (req: Request, res: Response): Promise<ICourse
     }
 }
 
-export const AddModuleToCourse = async (req: Request, res: Response): Promise<ICourse | any> => {
+export const AddModuleToCourse = async (req: Request, res: Response): Promise<IModule | any> => {
     try {
         // Extracting course id from request params
         const { id } = req.params;
@@ -150,7 +150,7 @@ export const AddModuleToCourse = async (req: Request, res: Response): Promise<IC
     }
 }
 
-export const AddQuizToCourse = async (req: Request, res: Response): Promise<ICourse | any> => {
+export const AddQuizToCourse = async (req: Request, res: Response): Promise<IQuiz | any> => {
     try {
         // Extracting course id from request params
         const { id } = req.params;
@@ -165,7 +165,7 @@ export const AddQuizToCourse = async (req: Request, res: Response): Promise<ICou
     }
 }
 
-export const AddResourceToCourse = async (req: Request, res: Response): Promise<ICourse | any> => {
+export const AddResourceToCourse = async (req: Request, res: Response): Promise<IRessource | any> => {
     try {
         // Extracting course id from request params
         const { id } = req.params;
@@ -177,5 +177,23 @@ export const AddResourceToCourse = async (req: Request, res: Response): Promise<
         res.status(result.success ? 200 : 400).json(result);
     } catch (error) {
         // Handling any errors that occur during resource addition
+    }
+}
+
+export const EnrollStudentToCourse = async (req: Request, res: Response): Promise<void> => {
+    try {
+        // Extracting course id and student id from request body
+        const { courseId } = req.body;
+        const { id } = req.params;
+
+        // Calling the course service to enroll student to course
+        const result = await courseService.enrollStudentToCourse(courseId, id);
+
+        // Sending a response based on the result of student enrollment
+        res.status(result.success ? 200 : 400).json(result);
+    } catch (error) {
+        // Handling any errors that occur during student enrollment
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: 'Internal Server Error' }); // Send a generic error response
     }
 }

@@ -1,5 +1,8 @@
-import { ICourse, IRessource } from "../interfaces/interface";
+import { ICourse, IUser } from "../interfaces/interface";
 import { Course } from "../schemas/courses.schema";
+import { User } from "../schemas/user.schema";
+import { Enrollment } from '../schemas/enrolement.schema'
+
 
 
 export const createCourse = async (courseData: ICourse) => {
@@ -198,3 +201,62 @@ export const deleteCourse = async (id: string) => {
         throw error;
     }
 }
+
+
+export const enrollStudentToCourse = async (courseId: string, studentId: string) => {
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            throw new Error("Course not found");
+        }
+
+        const student = await User.findById(studentId);
+        if (!student) {
+            throw new Error("Student not found");
+        }
+
+        const enrolled = new Enrollment({
+            courseId: courseId,
+            courseTitle: course.title,
+            userId: studentId,
+        });
+
+        await enrolled.save();
+
+        return { success: true, message: "Student enrolled successfully" };
+    } catch (error: any) {
+        throw new Error(`Error enrolling student: ${error.message}`);
+    }
+}
+
+
+// export const enrollStudentToCourse = async (id: any, userData: IUser) => {
+//     try {
+//         if (userData.enrolledToCourses && userData.enrolledToCourses.length > 0) {
+//             // const course = await Course.findById(courseId);
+//             const updatedUser = await User.findByIdAndUpdate(
+//                 id,
+//                 { $push: { enrolledToCourses: { $each: userData.enrolledToCourses } } },
+//                 { new: true }
+//             );
+
+//             // Vérifier si l'utilisateur existe
+//             if (!updatedUser) {
+//                 throw new Error("User not found");
+//             }
+
+//             return { success: true, message: "Courses added to user successfully", user: updatedUser };
+//         } else {
+//             // Si les cours ne sont pas présents, mettre à jour les autres champs de l'utilisateur
+//             const updatedUser = await User.findByIdAndUpdate(id, userData, { new: true });
+
+//             if (!updatedUser) {
+//                 throw new Error("User not found");
+//             }
+
+//             return { success: true, message: "User updated successfully", user: updatedUser };
+//         }
+//     } catch (error: any) {
+//         throw new Error(`Error enrolling student: ${error.message}`);
+//     }
+// }

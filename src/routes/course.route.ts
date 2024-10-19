@@ -1,5 +1,5 @@
 import express from 'express';
-import { CreateCourse, GetCourseById, UpdateCourse, DeleteCourse, GetAllCourses, AddModuleToCourse, AddQuizToCourse, AddResourceToCourse, GetCoursesByInstructorId } from '../controllers/course.controller';
+import { CreateCourse, GetCourseById, UpdateCourse, DeleteCourse, GetAllCourses, AddModuleToCourse, AddQuizToCourse, AddResourceToCourse, GetCoursesByInstructorId, EnrollStudentToCourse } from '../controllers/course.controller';
 
 import { guard } from '../middlewares/guard.middleware';
 
@@ -31,5 +31,7 @@ router.post('/quiz/:id', guard, AddQuizToCourse);
 
 // Add a resource to a course
 router.post('/ressources/:id', guard, AddResourceToCourse);
+
+router.post('/enroll/:id', EnrollStudentToCourse);   
 
 export default router;

@@ -18,7 +18,7 @@ router.post("/google-login-api", GoogleLogin);
 
 // Get all users (admin function)
 // localhost:2002/api/user/
-router.get("/", guard, GetAllUsers);
+router.get("/", GetAllUsers);
 
 // Get user by UID
 // localhost:2002/api/user/id/:id

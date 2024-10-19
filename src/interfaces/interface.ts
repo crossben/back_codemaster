@@ -10,10 +10,24 @@ export interface IUser extends Document {
     password?: string;
     profileImageUrl?: string;
     role: string;
-    enrolledToCourses?: Schema.Types.ObjectId[];
+    enrolledToCourses?: IEnrolledCourse;
     emailVerified?: boolean;
     phoneNumberVerified?: boolean;
 }
+
+export interface IInstructor extends Document {
+    uid: any;
+    firstname: string;
+    lastname: string;
+    email: string;
+    phoneNumber: string;
+    googleId?: string;
+    password?: string;
+    profileImageUrl: string;
+    role: string;
+    courses: ICourse[];
+}
+
 
 export interface IModule extends Document {
     name: string;
@@ -53,25 +67,11 @@ export interface ICourse extends Document {
     resources?: IRessource[] | undefined;
 }
 
-export interface IInstructor extends Document {
-    uid: any;
-    firstname: string;
-    lastname: string;
-    email: string;
-    phoneNumber: string;
-    googleId?: string;
-    password?: string;
-    profileImageUrl: string;
-    role: string;
-    courses: ICourse[];
-}
 
 export interface IEnrolledCourse extends Document {
     userId: Schema.Types.ObjectId;
     courseId: Schema.Types.ObjectId;
     courseTitle: string; // Added for quick reference
     enrollmentDate: Date;
-    progress: number;
     status: string;
-    lastAccessDate?: Date; // Optional: track when the user last accessed the course
 }
