@@ -113,7 +113,7 @@ export const GetUserById = async (req: Request, res: Response): Promise<IUser | 
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        res.status(200).json({ success: true, message: "User fetched successfully", user });
+        res.status(200).json({ user });
     } catch (error: any) {
         console.error('Error fetching user:', error);
         res.status(500).json({ success: false, message: "An error occurred fetching the user" });
@@ -220,3 +220,16 @@ export const GetUserByGoogleId = async (req: Request, res: Response): Promise<IU
         res.status(500).json({ success: false, message: "An error occurred fetching the user by Google ID" });
     }
 }
+
+
+export const EnrollToCourse = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { courseId } = req.body;
+        const { uid } = req.params; // Récupérer 'uid' depuis les paramètres de l'URL
+        const result = await userService.enrollToCourse(courseId, uid);
+        res.status(result.success ? 200 : 400).json(result);
+    } catch (error: any) {
+        console.error('Error enrolling student to course:', error);
+        res.status(500).json({ success: false, message: "An error occurred enrolling the student to the course" });
+    }
+};

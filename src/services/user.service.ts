@@ -2,6 +2,8 @@ import { User } from "../schemas/user.schema";
 import { compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { IUser } from "../interfaces/interface";
+import { Course } from "../schemas/courses.schema";
+import mongoose, { ObjectId } from "mongoose";
 // import authenticate from "../middlewares/auth.middleware";
 // import firebaseAdmin from "../config/firebase.config";
 
@@ -161,21 +163,15 @@ export const loginByGoogle = async (googleId: string): Promise<IUser | any> => {
     }
 }
 
-export const getUserById = async (id: any): Promise<IUser | any> => {
+export const getUserById = async (id: string): Promise<IUser | any> => {
     try {
-        const user = await User.findOne({ _id: id });
-        const jwtSecret = process.env.JWT_SECRET;
-        if (!jwtSecret) {
-            throw new Error('JWT_SECRET is not defined');
-        }
+        const user = await User.findById(id);
         if (!user) {
             return { success: false, message: "User not found" };
         }
-        // const token = jwt.sign({ _id: user.id }, jwtSecret) || "no token";
         return {
             success: true,
             message: "User fetched successfully",
-            // token: token,
             user: user ? user : null
         };
     } catch (error) {
@@ -183,6 +179,17 @@ export const getUserById = async (id: any): Promise<IUser | any> => {
         return { success: false, message: "Error fetching user" };
     }
 }
+
+// export const getUserById = async (id: string) => {
+//     try {
+//         const user = await User.findById(id);
+//         return user;
+//     } catch (error) {
+//         throw error;
+//     }
+// }
+
+
 export const getUserByUId = async (uid: any): Promise<IUser | any> => {
     try {
         const user = await User.findOne({ uid });
@@ -320,3 +327,38 @@ export const getUserByGoogleId = async (googleId: any): Promise<IUser | any> => 
         return null;
     }
 }
+
+export const enrollToCourse = async (courseId: any, userId: any): Promise<IUser | any> => {
+    try {
+        // Vérification de l'ID de l'utilisateur
+        if (!mongoose.Types.ObjectId.isValid(courseId)) {
+            return { success: false, message: "Invalid course ID" };
+        }
+
+        // Recherche de l'utilisateur par UID
+        const user = await User.findOne({ uid: userId });
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return { success: false, message: "Course not found" };
+        }
+
+
+        // Vérification si l'utilisateur est déjà inscrit au cours
+        if (user.enrolledToCourses?.includes(courseId)) {
+            return { success: false, message: "User already enrolled in this course" };
+        }
+
+        // Inscription de l'utilisateur au cours
+        user.enrolledToCourses = user.enrolledToCourses && user.enrolledToCourses.length > 0 ? user.enrolledToCourses : [courseId];
+        user.enrolledToCourses.push(courseId);
+        await user.save();
+
+        return { success: true, message: "User enrolled to course successfully" };
+    } catch (error) {
+        console.error('Error enrolling user to course:', error);
+        return { success: false, message: "Error enrolling user to course" };
+    }
+};

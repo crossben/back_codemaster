@@ -10,7 +10,7 @@ export interface IUser extends Document {
     password?: string;
     profileImageUrl?: string;
     role: string;
-    enrolledToCourses?: IEnrolledCourse;
+    enrolledToCourses?: [any];
     emailVerified?: boolean;
     phoneNumberVerified?: boolean;
 }

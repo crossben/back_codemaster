@@ -6,13 +6,13 @@ import { guard } from '../middlewares/guard.middleware';
 const router = express.Router();
 
 // Create a new course
-router.post('/create', guard, CreateCourse);
+router.post('/create', CreateCourse);
 
 // Get all courses
 router.get('/', GetAllCourses);
 
 // Get a specific course by ID
-router.get('/id/:id', guard, guard, GetCourseById);
+router.get('/id/:id', guard, GetCourseById);
 
 // Get a specific course by ID
 router.get('/instructor/:id', guard, GetCoursesByInstructorId);
@@ -30,8 +30,6 @@ router.post('/module/:id', guard, AddModuleToCourse);
 router.post('/quiz/:id', guard, AddQuizToCourse);
 
 // Add a resource to a course
-router.post('/ressources/:id', guard, AddResourceToCourse);
-
-router.post('/enroll/:id', EnrollStudentToCourse);   
+router.post('/ressources/:id', guard, AddResourceToCourse);   
 
 export default router;

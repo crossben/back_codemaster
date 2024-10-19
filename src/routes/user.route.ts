@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GetAllUsers, GoogleLogin, Login, Register, GetUserById, GetUserByMail, GetUserByPhoneNumber, GetUserByGoogleId, DeleteUser, UpdateUser } from "../controllers/user.controller";
+import { GetAllUsers, GoogleLogin, Login, Register, GetUserById, GetUserByMail, GetUserByPhoneNumber, GetUserByGoogleId, DeleteUser, UpdateUser, EnrollToCourse } from "../controllers/user.controller";
 import { guard } from "../middlewares/guard.middleware";
 
 const router = Router();
@@ -14,11 +14,11 @@ router.post("/login-api", Login);
 
 // User login with Google
 // localhost:2002/api/user/google-login-api
-router.post("/google-login-api", GoogleLogin);
+router.post("/google-login-api", guard, GoogleLogin);
 
 // Get all users (admin function)
 // localhost:2002/api/user/
-router.get("/", GetAllUsers);
+router.get("/", guard, GetAllUsers);
 
 // Get user by UID
 // localhost:2002/api/user/id/:id
@@ -43,5 +43,7 @@ router.delete("/delete/:id", guard, DeleteUser);
 // Update user information by UID
 // localhost:2002/api/user/update/:id
 router.put("/update/:id", guard, UpdateUser);
+
+router.post("/enroll/:uid", guard, EnrollToCourse);
 
 export default router;

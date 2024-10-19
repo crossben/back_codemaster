@@ -1,4 +1,4 @@
-import { model, Model, mongo, Schema } from "mongoose";
+import { model, Model, Schema } from "mongoose";
 import { IRessource } from "../interfaces/interface";
 
 const ressourceSchema = new Schema<IRessource>({
