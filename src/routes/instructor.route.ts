@@ -15,19 +15,19 @@ router.post('/register-api', RegisterInstructor);
 
 // Get all instructors route
 // localhost:2002/api/instructor/
-router.get('/', guard, GetAllInstructors);
+router.get('/',  GetAllInstructors);
 
 // Get instructor by ID route
 // localhost:2002/api/instructor/id/:id
-router.get('/id/:id', guard, GetInstructorById);
+router.get('/id/:id',  GetInstructorById);
 
 // Update instructor route
 // localhost:2002/api/instructor/update/:id
-router.put('/update/:id', guard, UpdateInstructor);
+router.put('/update/:id',  UpdateInstructor);
 
 // Delete instructor route
 // localhost:2002/api/instructor/delete/:id
-router.delete('/delete/:id', guard, DeleteInstructor);
+router.delete('/delete/:id',  DeleteInstructor);
 
 
 export default router;
