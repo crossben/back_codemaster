@@ -12,7 +12,7 @@ router.post('/create', CreateCourse);
 router.get('/', GetAllCourses);
 
 // Get a specific course by ID
-router.get('/id/:id', guard, GetCourseById);
+router.get('/id/:id', GetCourseById);
 
 // Get a specific course by ID
 router.get('/instructor/:id', guard, GetCoursesByInstructorId);

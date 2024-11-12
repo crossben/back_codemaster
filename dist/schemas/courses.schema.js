@@ -1,8 +1,8 @@
-import { Model, Schema, model } from "mongoose";
-import { ICourse } from "../interfaces/interface";
-
-
-const courseSchema = new Schema<ICourse>({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Course = void 0;
+var mongoose_1 = require("mongoose");
+var courseSchema = new mongoose_1.Schema({
     uid: {
         type: String,
         required: true,
@@ -36,7 +36,7 @@ const courseSchema = new Schema<ICourse>({
         default: "1 month",
     },
     instructor: {
-        type: String,
+        type: mongoose_1.Schema.Types.ObjectId, ref: 'users',
         required: true
     },
     enrolledStudents: {
@@ -56,38 +56,35 @@ const courseSchema = new Schema<ICourse>({
         default: [],
     },
     modules: {
-        type: Schema.Types.Array,
+        type: mongoose_1.Schema.Types.Array,
         default: [],
     },
     quizzes: [{
-        title: {
-            type: String,
-            required: true,
-        },
-        questions: [{
-            question: {
+            title: {
                 type: String,
                 required: true,
             },
-            options: {
-                type: [String],
-                required: true,
-            },
-            correctAnswer: {
-                type: String,
-                required: true,
-            },
+            questions: [{
+                    question: {
+                        type: String,
+                        required: true,
+                    },
+                    options: {
+                        type: [String],
+                        required: true,
+                    },
+                    correctAnswer: {
+                        type: String,
+                        required: true,
+                    },
+                }],
+            default: [],
         }],
-        default: [],
-    }],
     resources: {
-        type: Schema.Types.Array,
+        type: mongoose_1.Schema.Types.Array,
         default: [],
     },
 }, {
     timestamps: true,
 });
-
-export const Course: Model<ICourse> = model<ICourse>("Course", courseSchema);
-
-
+exports.Course = (0, mongoose_1.model)("Course", courseSchema);
